@@ -248,10 +248,9 @@ jobs:
           sarif_file: checkov.sarif
 
   terraform_plan:
-    name: 8) Terraform Plan (PR)
+    name: 8) Terraform Plan
     runs-on: ubuntu-latest
     needs: iac_scan
-    if: github.event_name == 'pull_request'
     permissions:
       id-token: write
       contents: read
@@ -282,6 +281,7 @@ jobs:
         run: terraform plan -var="image_tag=${{ github.sha }}" -no-color -out=tfplan 2>&1 | tee plan-output.txt
 
       - name: Comment plan on PR
+        if: github.event_name == 'pull_request'
         uses: actions/github-script@v7
         with:
           script: |
@@ -299,7 +299,7 @@ jobs:
   deploy:
     name: 9) Deploy Infra + App (main)
     runs-on: ubuntu-latest
-    needs: iac_scan
+    needs: [iac_scan, terraform_plan]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     environment: production
     env:
