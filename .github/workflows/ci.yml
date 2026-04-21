@@ -264,8 +264,8 @@ jobs:
       - name: Authenticate to GCP (OIDC)
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
-          service_account: ${{ vars.GCP_WIF_SERVICE_ACCOUNT }}
+          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+          service_account: ${{ secrets.GCP_WIF_SERVICE_ACCOUNT }}
 
       - name: Terraform Init
         working-directory: terraform
@@ -303,7 +303,7 @@ jobs:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     environment: production
     env:
-      TF_VAR_deployer_service_account_email: ${{ vars.GCP_WIF_SERVICE_ACCOUNT }}
+      TF_VAR_deployer_service_account_email: ${{ secrets.GCP_WIF_SERVICE_ACCOUNT }}
     permissions:
       id-token: write
       contents: read
@@ -313,8 +313,8 @@ jobs:
       - name: Authenticate to GCP (OIDC)
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
-          service_account: ${{ vars.GCP_WIF_SERVICE_ACCOUNT }}
+          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+          service_account: ${{ secrets.GCP_WIF_SERVICE_ACCOUNT }}
 
       - name: Setup gcloud
         uses: google-github-actions/setup-gcloud@v2
@@ -360,7 +360,7 @@ jobs:
             "projects/${{ env.GCP_PROJECT }}/serviceAccounts/${{ env.APP_NAME }}-run-sa@${{ env.GCP_PROJECT }}.iam.gserviceaccount.com roles/iam.serviceAccountUser serviceAccount:${{ env.APP_NAME }}-cicd-sa@${{ env.GCP_PROJECT }}.iam.gserviceaccount.com" || true
 
           terraform import google_service_account_iam_member.deployer_act_as_run_sa[0] \
-            "projects/${{ env.GCP_PROJECT }}/serviceAccounts/${{ env.APP_NAME }}-run-sa@${{ env.GCP_PROJECT }}.iam.gserviceaccount.com roles/iam.serviceAccountUser serviceAccount:${{ vars.GCP_WIF_SERVICE_ACCOUNT }}" || true
+            "projects/${{ env.GCP_PROJECT }}/serviceAccounts/${{ env.APP_NAME }}-run-sa@${{ env.GCP_PROJECT }}.iam.gserviceaccount.com roles/iam.serviceAccountUser serviceAccount:${{ secrets.GCP_WIF_SERVICE_ACCOUNT }}" || true
 
           terraform import google_artifact_registry_repository_iam_member.run_sa_reader \
             "projects/${{ env.GCP_PROJECT }}/locations/${{ env.GCP_REGION }}/repositories/${{ env.APP_NAME }}-repo roles/artifactregistry.reader serviceAccount:${{ env.APP_NAME }}-run-sa@${{ env.GCP_PROJECT }}.iam.gserviceaccount.com" || true
@@ -375,7 +375,7 @@ jobs:
         working-directory: terraform
         run: |
           terraform apply -auto-approve \
-            -var="deployer_service_account_email=${{ vars.GCP_WIF_SERVICE_ACCOUNT }}" \
+            -var="deployer_service_account_email=${{ secrets.GCP_WIF_SERVICE_ACCOUNT }}" \
             -target=google_project_service.artifact_registry_api \
             -target=google_project_service.cloudkms_api \
             -target=google_kms_key_ring.artifact_registry \
@@ -396,7 +396,7 @@ jobs:
 
       - name: Terraform Apply
         working-directory: terraform
-        run: terraform apply -var="image_tag=${{ github.sha }}" -var="deployer_service_account_email=${{ vars.GCP_WIF_SERVICE_ACCOUNT }}" -auto-approve
+        run: terraform apply -var="image_tag=${{ github.sha }}" -var="deployer_service_account_email=${{ secrets.GCP_WIF_SERVICE_ACCOUNT }}" -auto-approve
 
       - name: Cloud Run smoke test
         run: |
