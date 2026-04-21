@@ -1,0 +1,406 @@
+name: DevSecOps Ordered Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  APP_NAME: devsecops-app
+  GCP_REGION: europe-west1
+  GCP_PROJECT: prismatic-rock-485510-c2
+  REGISTRY: europe-west1-docker.pkg.dev
+  IMAGE: europe-west1-docker.pkg.dev/prismatic-rock-485510-c2/devsecops-app-repo/devsecops-app
+
+jobs:
+  quality:
+    name: 1) Quality Gate (Lint + Build)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests (if present)
+        run: npm run test --if-present
+
+      - name: Build app
+        run: npm run build
+
+  sast:
+    name: 2) SAST (Semgrep)
+    runs-on: ubuntu-latest
+    needs: quality
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Semgrep
+        uses: semgrep/semgrep-action@v1
+        with:
+          config: >-
+            p/javascript
+            p/nodejs
+            p/owasp-top-ten
+          generateSarif: "1"
+
+      - name: Upload Semgrep SARIF
+        if: always() && vars.ENABLE_CODE_SCANNING == 'true' && hashFiles('semgrep.sarif') != ''
+        continue-on-error: true
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: semgrep.sarif
+
+  secrets:
+    name: 3) Secret Scan (gitleaks)
+    runs-on: ubuntu-latest
+    needs: sast
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  sca:
+    name: 4) Dependency SCA (npm audit)
+    runs-on: ubuntu-latest
+    needs: secrets
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: npm audit (fail on high/critical)
+        run: npm audit --audit-level=high
+
+  container_scan:
+    name: 5) Container Scan (Trivy)
+    runs-on: ubuntu-latest
+    needs: sca
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image for scanning
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          load: true
+          tags: ${{ env.IMAGE }}:${{ github.sha }}
+
+      - name: Trivy JSON report
+        uses: aquasecurity/trivy-action@v0.35.0
+        with:
+          image-ref: ${{ env.IMAGE }}:${{ github.sha }}
+          format: json
+          output: trivy-results.json
+          exit-code: "0"
+
+      - name: Parse Trivy results (gate critical)
+        run: python3 scripts/parse_trivy.py
+
+      - name: Trivy table report (CI log)
+        if: always()
+        uses: aquasecurity/trivy-action@v0.35.0
+        with:
+          image-ref: ${{ env.IMAGE }}:${{ github.sha }}
+          format: table
+          severity: CRITICAL,HIGH,MEDIUM
+          exit-code: "0"
+
+      - name: Trivy SARIF report
+        if: always()
+        uses: aquasecurity/trivy-action@v0.35.0
+        with:
+          image-ref: ${{ env.IMAGE }}:${{ github.sha }}
+          format: sarif
+          output: trivy.sarif
+          exit-code: "0"
+
+      - name: Upload Trivy SARIF
+        if: always() && vars.ENABLE_CODE_SCANNING == 'true'
+        continue-on-error: true
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: trivy.sarif
+
+      - name: Upload Trivy JSON artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-results
+          path: trivy-results.json
+
+  dast:
+    name: 6) DAST (OWASP ZAP Baseline)
+    runs-on: ubuntu-latest
+    needs: container_scan
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build and run app container
+        run: |
+          docker build -t ${{ env.IMAGE }}:${{ github.sha }} .
+          docker run -d --name app -p 3000:3000 ${{ env.IMAGE }}:${{ github.sha }}
+          for i in $(seq 1 24); do
+            if curl -sf http://localhost:3000/ >/dev/null 2>&1; then
+              echo "App is reachable"
+              exit 0
+            fi
+            echo "Waiting for app startup ($i/24)..."
+            sleep 5
+          done
+          echo "App failed to start in time"
+          docker logs app || true
+          exit 1
+
+      - name: Prepare writable ZAP workspace files
+        run: |
+          touch zap.yaml report_json.json report_md.md report_html.html
+          chmod a+rw zap.yaml report_json.json report_md.md report_html.html
+
+      - name: ZAP Baseline scan
+        run: |
+          docker run --rm \
+            -v "$PWD:/zap/wrk/:rw" \
+            --network=host \
+            ghcr.io/zaproxy/zaproxy:stable \
+            zap-baseline.py \
+            -t http://localhost:3000 \
+            -J report_json.json \
+            -w report_md.md \
+            -r report_html.html \
+            -I
+
+      - name: Upload ZAP reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-baseline-report
+          path: |
+            report_html.html
+            report_md.md
+            report_json.json
+          if-no-files-found: ignore
+
+      - name: Stop container
+        if: always()
+        run: docker rm -f app || true
+
+  iac_scan:
+    name: 7) IaC Scan (Checkov)
+    runs-on: ubuntu-latest
+    needs: dast
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: terraform/
+          framework: terraform
+          output_format: sarif
+          output_file_path: checkov.sarif
+          soft_fail: false
+
+      - name: Upload Checkov SARIF
+        if: always() && vars.ENABLE_CODE_SCANNING == 'true'
+        continue-on-error: true
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: checkov.sarif
+
+  terraform_plan:
+    name: 8) Terraform Plan (PR)
+    runs-on: ubuntu-latest
+    needs: iac_scan
+    if: github.event_name == 'pull_request'
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Authenticate to GCP (OIDC)
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_WIF_SERVICE_ACCOUNT }}
+
+      - name: Terraform Init
+        working-directory: terraform
+        run: terraform init
+
+      - name: Terraform Validate
+        working-directory: terraform
+        run: terraform validate
+
+      - name: Terraform Plan
+        id: plan
+        working-directory: terraform
+        run: terraform plan -var="image_tag=${{ github.sha }}" -no-color -out=tfplan 2>&1 | tee plan-output.txt
+
+      - name: Comment plan on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const plan = fs.readFileSync('terraform/plan-output.txt', 'utf8');
+            const truncated = plan.length > 60000 ? plan.substring(0, 60000) + '\n... (truncated)' : plan;
+            const body = `## Terraform Plan\n\`\`\`terraform\n${truncated}\n\`\`\``;
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body
+            });
+
+  deploy:
+    name: 9) Deploy Infra + App (main)
+    runs-on: ubuntu-latest
+    needs: iac_scan
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment: production
+    env:
+      TF_VAR_deployer_service_account_email: ${{ vars.GCP_WIF_SERVICE_ACCOUNT }}
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Authenticate to GCP (OIDC)
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_WIF_SERVICE_ACCOUNT }}
+
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        working-directory: terraform
+        run: terraform init
+
+      - name: Import existing bootstrap resources (idempotent)
+        working-directory: terraform
+        run: |
+          terraform import google_kms_key_ring.artifact_registry \
+            "projects/${{ env.GCP_PROJECT }}/locations/${{ env.GCP_REGION }}/keyRings/artifact-registry-kr" || true
+
+          terraform import google_kms_crypto_key.artifact_registry \
+            "projects/${{ env.GCP_PROJECT }}/locations/${{ env.GCP_REGION }}/keyRings/artifact-registry-kr/cryptoKeys/artifact-registry-key" || true
+
+          terraform import google_artifact_registry_repository.app_repo \
+            "projects/${{ env.GCP_PROJECT }}/locations/${{ env.GCP_REGION }}/repositories/${{ env.APP_NAME }}-repo" || true
+
+          terraform import google_secret_manager_secret.gemini_api_key \
+            "projects/${{ env.GCP_PROJECT }}/secrets/gemini-api-key" || true
+
+          terraform import google_secret_manager_secret.firebase_service_account \
+            "projects/${{ env.GCP_PROJECT }}/secrets/firebase-service-account" || true
+
+          terraform import google_service_account.cloud_run_sa \
+            "projects/${{ env.GCP_PROJECT }}/serviceAccounts/${{ env.APP_NAME }}-run-sa@${{ env.GCP_PROJECT }}.iam.gserviceaccount.com" || true
+
+          terraform import google_service_account.cicd_sa \
+            "projects/${{ env.GCP_PROJECT }}/serviceAccounts/${{ env.APP_NAME }}-cicd-sa@${{ env.GCP_PROJECT }}.iam.gserviceaccount.com" || true
+
+          terraform import google_project_iam_member.run_sa_secret_accessor \
+            "${{ env.GCP_PROJECT }} roles/secretmanager.secretAccessor serviceAccount:${{ env.APP_NAME }}-run-sa@${{ env.GCP_PROJECT }}.iam.gserviceaccount.com" || true
+
+          terraform import google_project_iam_member.cicd_sa_run_developer \
+            "${{ env.GCP_PROJECT }} roles/run.developer serviceAccount:${{ env.APP_NAME }}-cicd-sa@${{ env.GCP_PROJECT }}.iam.gserviceaccount.com" || true
+
+          terraform import google_service_account_iam_member.cicd_sa_act_as_run_sa \
+            "projects/${{ env.GCP_PROJECT }}/serviceAccounts/${{ env.APP_NAME }}-run-sa@${{ env.GCP_PROJECT }}.iam.gserviceaccount.com roles/iam.serviceAccountUser serviceAccount:${{ env.APP_NAME }}-cicd-sa@${{ env.GCP_PROJECT }}.iam.gserviceaccount.com" || true
+
+          terraform import google_service_account_iam_member.deployer_act_as_run_sa[0] \
+            "projects/${{ env.GCP_PROJECT }}/serviceAccounts/${{ env.APP_NAME }}-run-sa@${{ env.GCP_PROJECT }}.iam.gserviceaccount.com roles/iam.serviceAccountUser serviceAccount:${{ vars.GCP_WIF_SERVICE_ACCOUNT }}" || true
+
+          terraform import google_artifact_registry_repository_iam_member.run_sa_reader \
+            "projects/${{ env.GCP_PROJECT }}/locations/${{ env.GCP_REGION }}/repositories/${{ env.APP_NAME }}-repo roles/artifactregistry.reader serviceAccount:${{ env.APP_NAME }}-run-sa@${{ env.GCP_PROJECT }}.iam.gserviceaccount.com" || true
+
+          terraform import google_artifact_registry_repository_iam_member.cicd_sa_writer \
+            "projects/${{ env.GCP_PROJECT }}/locations/${{ env.GCP_REGION }}/repositories/${{ env.APP_NAME }}-repo roles/artifactregistry.writer serviceAccount:${{ env.APP_NAME }}-cicd-sa@${{ env.GCP_PROJECT }}.iam.gserviceaccount.com" || true
+
+          terraform import google_cloud_run_v2_service.app \
+            "projects/${{ env.GCP_PROJECT }}/locations/${{ env.GCP_REGION }}/services/${{ env.APP_NAME }}" || true
+
+      - name: Bootstrap Artifact Registry (KMS-encrypted)
+        working-directory: terraform
+        run: |
+          terraform apply -auto-approve \
+            -var="deployer_service_account_email=${{ vars.GCP_WIF_SERVICE_ACCOUNT }}" \
+            -target=google_project_service.artifact_registry_api \
+            -target=google_project_service.cloudkms_api \
+            -target=google_kms_key_ring.artifact_registry \
+            -target=google_kms_crypto_key.artifact_registry \
+            -target=google_artifact_registry_repository.app_repo
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker ${{ env.REGISTRY }} --quiet
+
+      - name: Build and push image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ env.IMAGE }}:${{ github.sha }}
+            ${{ env.IMAGE }}:latest
+
+      - name: Terraform Apply
+        working-directory: terraform
+        run: terraform apply -var="image_tag=${{ github.sha }}" -var="deployer_service_account_email=${{ vars.GCP_WIF_SERVICE_ACCOUNT }}" -auto-approve
+
+      - name: Cloud Run smoke test
+        run: |
+          URL=$(gcloud run services describe ${{ env.APP_NAME }} --region=${{ env.GCP_REGION }} --format='value(status.url)')
+          echo "Service URL: $URL"
+          echo "Service URL: $URL" >> "$GITHUB_STEP_SUMMARY"
+          curl -sf "$URL/" > /dev/null

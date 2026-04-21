@@ -1,0 +1,78 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - link "ZenType" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - img [ref=e6]
+          - generic [ref=e8]: ZenType
+        - generic [ref=e9]:
+          - button "Toggle theme" [ref=e10]:
+            - img
+            - img
+            - generic [ref=e11]: Toggle theme
+          - button [ref=e13]:
+            - img
+    - main [ref=e14]:
+      - generic [ref=e15]:
+        - generic [ref=e16]:
+          - img [ref=e18]
+          - heading "Join ZenType" [level=1] [ref=e20]
+          - paragraph [ref=e21]: Create your account and start improving your typing skills
+        - generic [ref=e22]:
+          - paragraph [ref=e72]: Unable to sign up with Google. Please try again later.
+          - generic [ref=e23]:
+            - generic [ref=e24]:
+              - generic [ref=e25]: Username
+              - generic [ref=e26]:
+                - img [ref=e27]
+                - textbox "Username" [ref=e30]:
+                  - /placeholder: Choose a username
+                  - text: qauser0420
+            - generic [ref=e31]:
+              - generic [ref=e32]: Email
+              - generic [ref=e33]:
+                - img [ref=e34]
+                - textbox "Email" [ref=e37]:
+                  - /placeholder: Enter your email
+                  - text: qauser0420+1@gmail.com
+            - generic [ref=e38]:
+              - generic [ref=e39]: Password
+              - generic [ref=e40]:
+                - img [ref=e41]
+                - textbox "Password" [ref=e44]:
+                  - /placeholder: Create a password
+                  - text: TestPass!2026
+                - button "Show password" [ref=e45]:
+                  - img [ref=e46]
+            - generic [ref=e49]:
+              - checkbox "I agree to the Terms of Service and Privacy Policy" [checked] [ref=e50] [cursor=pointer]
+              - generic [ref=e51] [cursor=pointer]:
+                - text: I agree to the
+                - link "Terms of Service" [ref=e52]:
+                  - /url: /terms-of-service
+                - text: and
+                - link "Privacy Policy" [ref=e53]:
+                  - /url: /privacy-policy
+            - button "Create Account" [ref=e75]
+          - generic [ref=e58]: or
+          - generic [ref=e59]:
+            - button "Sign in with Google" [ref=e60]:
+              - img
+              - text: Sign in with Google
+            - button "Continue as Guest" [ref=e61]
+          - generic [ref=e62]:
+            - text: Already have an account?
+            - link "Sign in" [ref=e63] [cursor=pointer]:
+              - /url: /login
+  - generic [ref=e65]:
+    - button "Debug ON 1 1 ERR" [ref=e73]:
+      - img
+      - text: Debug ON
+      - generic [ref=e67]: "1"
+      - generic [ref=e74]: 1 ERR
+    - button [ref=e68]:
+      - img
+  - alert [ref=e69]
+  - iframe [ref=e70]:
+    

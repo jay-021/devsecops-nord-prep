@@ -1,0 +1,147 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e366]:
+    - banner [ref=e367]:
+      - generic [ref=e368]:
+        - link "ZenType" [ref=e369] [cursor=pointer]:
+          - /url: /
+          - img [ref=e370]
+          - generic [ref=e372]: ZenType
+        - navigation [ref=e373]:
+          - link "Test" [ref=e374] [cursor=pointer]:
+            - /url: /test
+            - img [ref=e375]
+            - generic [ref=e377]: Test
+          - link "Dashboard" [ref=e378] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e379]
+            - generic [ref=e381]: Dashboard
+          - link "History" [ref=e382] [cursor=pointer]:
+            - /url: /history
+            - img [ref=e383]
+            - generic [ref=e387]: History
+          - link "Leaderboard" [ref=e388] [cursor=pointer]:
+            - /url: /leaderboard
+            - img [ref=e389]
+            - generic [ref=e395]: Leaderboard
+          - link "Settings" [ref=e396] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e397]
+            - generic [ref=e400]: Settings
+        - generic [ref=e401]:
+          - button "Toggle theme" [ref=e402]:
+            - img
+            - img
+            - generic [ref=e403]: Toggle theme
+          - button [ref=e405]:
+            - img
+    - main [ref=e406]:
+      - generic [ref=e407]:
+        - generic [ref=e408]:
+          - heading "Settings" [level=1] [ref=e409]
+          - paragraph [ref=e410]: Customize your ZenType experience
+        - generic [ref=e411]:
+          - generic [ref=e412]:
+            - img [ref=e413]
+            - heading "Profile Settings" [level=2] [ref=e416]
+          - generic [ref=e417]:
+            - generic [ref=e418]:
+              - generic [ref=e419]: Username
+              - textbox "Username" [ref=e420]:
+                - /placeholder: Enter your username
+                - text: qauser0420+1
+            - generic [ref=e421]:
+              - generic [ref=e422]: Short Bio
+              - textbox "Short Bio" [ref=e423]:
+                - /placeholder: Tell us about your typing journey...
+        - generic [ref=e424]:
+          - generic [ref=e425]:
+            - img [ref=e426]
+            - heading "Typing Area Themes" [level=2] [ref=e432]
+          - generic [ref=e433]:
+            - paragraph [ref=e434]: Choose a visual theme for your typing practice area
+            - generic [ref=e435]:
+              - paragraph [ref=e436]: "Live Preview:"
+              - paragraph [ref=e437]: The quick brown fox jumps over the lazy dog. This is how your typing area will look.
+            - generic [ref=e438]:
+              - button "Sample Text Standard" [ref=e439]:
+                - generic [ref=e441]: Sample Text
+                - paragraph [ref=e442]: Standard
+              - button "Sample Text Midnight Blue" [ref=e443]:
+                - generic [ref=e445]: Sample Text
+                - paragraph [ref=e446]: Midnight Blue
+              - button "Sample Text Forest Mist" [ref=e447]:
+                - generic [ref=e449]: Sample Text
+                - paragraph [ref=e450]: Forest Mist
+              - button "Sample Text Neon Dreams" [ref=e451]:
+                - generic [ref=e453]: Sample Text
+                - paragraph [ref=e454]: Neon Dreams
+              - button "Sample Text Sunset Blaze" [ref=e455]:
+                - generic [ref=e457]: Sample Text
+                - paragraph [ref=e458]: Sunset Blaze
+              - button "Sample Text Ocean Aurora" [ref=e459]:
+                - generic [ref=e461]: Sample Text
+                - paragraph [ref=e462]: Ocean Aurora
+              - button "Sample Text Light Sky" [ref=e463]:
+                - generic [ref=e465]: Sample Text
+                - paragraph [ref=e466]: Light Sky
+              - button "Sample Text Soft Lavender" [ref=e467]:
+                - generic [ref=e469]: Sample Text
+                - paragraph [ref=e470]: Soft Lavender
+              - button "Sample Text Cosmic Void" [ref=e471]:
+                - generic [ref=e473]: Sample Text
+                - paragraph [ref=e474]: Cosmic Void
+              - button "Sample Text Matrix Code" [ref=e475]:
+                - generic [ref=e477]: Sample Text
+                - paragraph [ref=e478]: Matrix Code
+        - generic [ref=e479]:
+          - generic [ref=e480]:
+            - img [ref=e481]
+            - heading "Typing Font" [level=2] [ref=e483]
+          - generic [ref=e484]:
+            - paragraph [ref=e485]: Select your preferred font (monospaced or decorative)
+            - combobox [ref=e486]:
+              - generic: Fira Code
+              - img
+            - generic [ref=e487]:
+              - paragraph [ref=e488]: "Font Preview:"
+              - paragraph [ref=e489]:
+                - text: The quick brown fox jumps over the lazy dog. 1234567890
+                - text: Correct characters Incorrect characters
+        - generic [ref=e490]:
+          - generic [ref=e491]:
+            - img [ref=e492]
+            - heading "General Settings" [level=2] [ref=e495]
+          - generic [ref=e496]:
+            - generic [ref=e497]:
+              - generic [ref=e498]:
+                - generic [ref=e499]: Keyboard Sounds
+                - paragraph [ref=e500]: Enable mechanical keyboard sound effects
+              - switch "Keyboard Sounds" [ref=e501]
+            - generic [ref=e502]:
+              - generic [ref=e503]:
+                - generic [ref=e504]: Visual Feedback
+                - paragraph [ref=e505]: Show visual indicators for correct/incorrect keystrokes
+              - switch "Visual Feedback" [checked] [ref=e506]
+            - generic [ref=e507]:
+              - generic [ref=e508]:
+                - generic [ref=e509]: Auto-save AI-Generated Tests
+                - paragraph [ref=e510]: Automatically save tests you generate to the public library
+              - switch "Auto-save AI-Generated Tests" [ref=e511]
+        - generic [ref=e512]:
+          - generic [ref=e513]:
+            - img [ref=e514]
+            - heading "Danger Zone" [level=2] [ref=e516]
+          - generic [ref=e517]:
+            - generic [ref=e518]:
+              - heading "Delete All Data" [level=3] [ref=e519]
+              - paragraph [ref=e520]: This action cannot be undone. This will permanently delete your account and remove all your data from our servers.
+            - button "Delete My Account" [ref=e521]:
+              - img
+              - text: Delete My Account
+        - button "Save Changes" [ref=e523]
+  - button "Debug" [ref=e524]:
+    - img
+    - text: Debug
+  - alert [ref=e69]
+  - iframe [ref=e70]:
+    

@@ -1,0 +1,41 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]
+    - main [ref=e11]:
+      - generic [ref=e12]:
+        - heading "Find Your Flow. Master Your Typing." [level=1] [ref=e13]
+        - paragraph [ref=e14]: ZenType is a modern, AI-powered typing platform designed for focus, improvement, and seamless practice.
+        - link "Begin Your Practice" [ref=e15] [cursor=pointer]:
+          - /url: /test
+          - button "Begin Your Practice" [ref=e16]
+      - generic [ref=e17]:
+        - generic [ref=e18]:
+          - img [ref=e20]
+          - heading "Smart Practice" [level=3] [ref=e23]
+          - paragraph [ref=e24]: Adaptive typing tests that adjust to your skill level!
+        - generic [ref=e25]:
+          - img [ref=e27]
+          - heading "AI-Powered" [level=3] [ref=e29]
+          - paragraph [ref=e30]: Generate custom typing content with AI!
+        - generic [ref=e31]:
+          - img [ref=e33]
+          - heading "Precision Focus" [level=3] [ref=e37]
+          - paragraph [ref=e38]: Track accuracy and improve with detailed analytics!
+        - generic [ref=e39]:
+          - img [ref=e41]
+          - heading "Progress Tracking" [level=3] [ref=e44]
+          - paragraph [ref=e45]: Monitor your improvement over time!
+      - generic [ref=e46]:
+        - heading "Ready to improve your typing?" [level=2] [ref=e47]
+        - paragraph [ref=e48]: Join thousands of users who have already improved their typing speed and accuracy with ZenType.
+        - generic [ref=e49]:
+          - link "Create Account" [ref=e50] [cursor=pointer]:
+            - /url: /signup
+            - button "Create Account" [ref=e51]
+          - link "Try as Guest" [ref=e52] [cursor=pointer]:
+            - /url: /test
+            - button "Try as Guest" [ref=e53]
+  - button "Debug" [ref=e55]:
+    - img
+    - text: Debug
+  - alert [ref=e56]

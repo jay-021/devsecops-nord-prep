@@ -1,0 +1,54 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - link "ZenType" [ref=e17] [cursor=pointer]:
+          - /url: /
+          - img [ref=e18]
+          - generic [ref=e20]: ZenType
+        - navigation [ref=e21]:
+          - link "Test" [ref=e22] [cursor=pointer]:
+            - /url: /test
+            - img [ref=e23]
+            - generic [ref=e25]: Test
+          - link "Dashboard" [ref=e26] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e27]
+            - generic [ref=e29]: Dashboard
+          - link "History" [ref=e30] [cursor=pointer]:
+            - /url: /history
+            - img [ref=e31]
+            - generic [ref=e35]: History
+          - link "Leaderboard" [ref=e36] [cursor=pointer]:
+            - /url: /leaderboard
+            - img [ref=e37]
+            - generic [ref=e43]: Leaderboard
+          - link "Settings" [ref=e44] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e45]
+            - generic [ref=e48]: Settings
+        - generic [ref=e49]:
+          - button "Toggle theme" [ref=e50]:
+            - img
+            - img
+            - generic [ref=e51]: Toggle theme
+          - button [ref=e53]:
+            - img
+    - main [ref=e11]:
+      - generic [ref=e12]:
+        - generic [ref=e54]:
+          - img [ref=e55]
+          - heading "Test History" [level=1] [ref=e59]
+        - paragraph [ref=e60]: Review your past typing test performances and track your improvement over time
+      - generic [ref=e62]:
+        - img [ref=e64]
+        - generic [ref=e68]:
+          - heading "No typing history yet" [level=2] [ref=e69]
+          - paragraph [ref=e70]: Your completed typing tests will appear here. Start typing to build your history!
+        - button "Start Typing" [ref=e71]:
+          - img
+          - text: Start Typing
+  - button "Debug" [ref=e15]:
+    - img
+    - text: Debug
+  - alert [ref=e16]

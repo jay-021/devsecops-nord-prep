@@ -1,0 +1,14 @@
+title = "DevSecOps repo gitleaks config"
+
+[allowlist]
+description = "Allow known non-secret Firebase public identifiers"
+regexes = [
+  '''[a-z0-9-]+\.firebaseapp\.com''',
+  '''[a-z0-9-]+\.web\.app''',
+  '''[a-z0-9-]+-default-rtdb\.firebaseio\.com''',
+  '''[a-z0-9-]+\.firebasedatabase\.app'''
+]
+paths = [
+  '''README\.md''',
+  '''docs/.*'''
+]

@@ -1,0 +1,19 @@
+# .checkov.yaml — Checkov IaC scanner configuration
+# Placed in the terraform/ directory so Checkov picks it up automatically
+
+framework:
+  - terraform
+
+# Checks to skip with documented reasons
+# Format: CHECK_ID: "reason for skipping"
+skip-check:
+  - CKV_GCP_62   # Cloud Run: audit logging not required for dev/thesis project
+  - CKV_GCP_102  # Cloud Run: VPC connector not required for public-facing service
+
+# Soft-fail means Checkov reports findings but does not fail the CI job
+# Set to false in production to enforce hard failure
+soft-fail: false
+
+# Output SARIF for GitHub Security tab
+output:
+  - sarif

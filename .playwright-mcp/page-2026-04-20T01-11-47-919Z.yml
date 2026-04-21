@@ -1,0 +1,120 @@
+- generic [ref=e1]:
+  - generic [ref=e158]:
+    - banner [ref=e159]:
+      - generic [ref=e160]:
+        - link "ZenType" [ref=e161] [cursor=pointer]:
+          - /url: /
+          - img [ref=e162]
+          - generic [ref=e164]: ZenType
+        - navigation [ref=e165]:
+          - link "Test" [ref=e166] [cursor=pointer]:
+            - /url: /test
+            - img [ref=e167]
+            - generic [ref=e169]: Test
+          - link "Dashboard" [ref=e170] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e171]
+            - generic [ref=e173]: Dashboard
+          - link "History" [ref=e174] [cursor=pointer]:
+            - /url: /history
+            - img [ref=e175]
+            - generic [ref=e179]: History
+          - link "Leaderboard" [ref=e180] [cursor=pointer]:
+            - /url: /leaderboard
+            - img [ref=e181]
+            - generic [ref=e187]: Leaderboard
+          - link "Settings" [ref=e188] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e189]
+            - generic [ref=e192]: Settings
+        - generic [ref=e193]:
+          - button "Toggle theme" [ref=e194]:
+            - img
+            - img
+            - generic [ref=e195]: Toggle theme
+          - button [ref=e197]:
+            - img
+    - main [ref=e198]:
+      - generic [ref=e199]:
+        - generic [ref=e200]:
+          - heading "Configure Your Test" [level=1] [ref=e201]
+          - paragraph [ref=e202]: Customize your typing test settings for the perfect practice session
+        - generic [ref=e203]:
+          - generic [ref=e204]:
+            - tablist [ref=e205]:
+              - tab "Practice Test" [selected] [ref=e206]
+              - tab "AI-Generated Test" [ref=e207]
+              - tab "Simple Mode" [ref=e208]
+            - tabpanel "Practice Test" [active] [ref=e209]:
+              - generic [ref=e210]:
+                - generic [ref=e211]:
+                  - generic [ref=e212]:
+                    - img [ref=e213]
+                    - text: Time
+                  - generic [ref=e216]:
+                    - button "30" [ref=e217]
+                    - button "60" [ref=e218]
+                    - button "120" [ref=e219]
+                    - button "300" [ref=e220]
+                - generic [ref=e221]:
+                  - generic [ref=e222]:
+                    - img [ref=e223]
+                    - text: Difficulty
+                  - generic [ref=e227]:
+                    - button "Easy" [ref=e228]
+                    - button "Medium" [ref=e229]
+                    - button "Hard" [ref=e230]
+                - generic [ref=e231]:
+                  - generic [ref=e232]:
+                    - img [ref=e233]
+                    - text: Choose Test
+                  - generic [ref=e235]:
+                    - generic [ref=e236] [cursor=pointer]:
+                      - generic [ref=e237]:
+                        - generic [ref=e238]:
+                          - generic [ref=e239]: Technology
+                          - generic [ref=e240]: Medium
+                        - generic [ref=e241]:
+                          - generic [ref=e242]: 52 words
+                          - text: •1m
+                      - paragraph [ref=e243]: Cloud-native development practices emphasize containerization, microservices architecture, and automated deployment pipe...
+                      - generic [ref=e269]: ✓ Selected - Ready to start typing
+                    - generic [ref=e244] [cursor=pointer]:
+                      - generic [ref=e245]:
+                        - generic [ref=e246]:
+                          - generic [ref=e247]: Business & Finance
+                          - generic [ref=e248]: Medium
+                        - generic [ref=e249]:
+                          - generic [ref=e250]: 88 words
+                          - text: •1m
+                      - paragraph [ref=e251]: Corporate financial management involves sophisticated analysis of capital structure, cost of capital calculations, and s...
+                    - generic [ref=e252] [cursor=pointer]:
+                      - generic [ref=e253]:
+                        - generic [ref=e254]:
+                          - generic [ref=e255]: Customer Support - VPN
+                          - generic [ref=e256]: Medium
+                        - generic [ref=e257]:
+                          - generic [ref=e258]: 69 words
+                          - text: •1m
+                      - paragraph [ref=e259]: Technical VPN support specialists diagnose complex connectivity issues involving network protocols, firewall configurati...
+                    - generic [ref=e260] [cursor=pointer]:
+                      - generic [ref=e261]:
+                        - generic [ref=e262]:
+                          - generic [ref=e263]: Health & Medical
+                          - generic [ref=e264]: Medium
+                        - generic [ref=e265]:
+                          - generic [ref=e266]: 81 words
+                          - text: •1m
+                      - paragraph [ref=e267]: Clinical healthcare delivery involves sophisticated diagnostic procedures, evidence-based treatment protocols, and inter...
+          - button "Start Typing" [ref=e270]
+  - generic [ref=e65]:
+    - button "Debug ON 13 1 ERR" [ref=e271]:
+      - img
+      - text: Debug ON
+      - generic [ref=e67]: "13"
+      - generic [ref=e74]: 1 ERR
+    - button [ref=e68]:
+      - img
+  - alert [ref=e69]
+  - iframe [ref=e70]:
+    

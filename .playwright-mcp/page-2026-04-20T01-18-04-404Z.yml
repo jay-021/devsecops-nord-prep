@@ -1,0 +1,53 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e56]:
+    - banner [ref=e57]:
+      - generic [ref=e58]:
+        - link "ZenType" [ref=e59] [cursor=pointer]:
+          - /url: /
+          - img [ref=e60]
+          - generic [ref=e62]: ZenType
+        - navigation [ref=e63]:
+          - link "Test" [ref=e64] [cursor=pointer]:
+            - /url: /test
+            - img [ref=e65]
+            - generic [ref=e67]: Test
+          - link "Dashboard" [ref=e68] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e69]
+            - generic [ref=e71]: Dashboard
+          - link "History" [ref=e72] [cursor=pointer]:
+            - /url: /history
+            - img [ref=e73]
+            - generic [ref=e77]: History
+          - link "Leaderboard" [ref=e78] [cursor=pointer]:
+            - /url: /leaderboard
+            - img [ref=e79]
+            - generic [ref=e85]: Leaderboard
+          - link "Settings" [ref=e86] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e87]
+            - generic [ref=e90]: Settings
+        - generic [ref=e91]:
+          - button "Toggle theme" [ref=e92]:
+            - img
+            - img
+            - generic [ref=e93]: Toggle theme
+          - button [ref=e95]:
+            - img
+    - main [ref=e96]:
+      - generic [ref=e97]:
+        - generic [ref=e98]:
+          - heading "Welcome, qauser0420+1!" [level=1] [ref=e99]
+          - paragraph [ref=e100]: You don't have any typing data yet. Start your typing journey!
+        - generic [ref=e102]:
+          - img [ref=e104]
+          - generic [ref=e106]:
+            - heading "Ready to start typing?" [level=2] [ref=e107]
+            - paragraph [ref=e108]: Take your first typing test to see your stats here!
+          - button "Start Typing" [ref=e109]:
+            - img
+            - text: Start Typing
+  - button "Debug" [ref=e54]:
+    - img
+    - text: Debug
+  - alert [ref=e55]

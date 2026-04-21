@@ -1,0 +1,44 @@
+# Terraform
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+terraform/tfplan
+terraform/plan-output.txt
+*.tfvars.local
+
+# GCP service account keys — NEVER commit these
+cicd-sa-key.json
+*-sa-key.json
+*.json.key
+*-firebase-adminsdk-*.json
+
+# Security scan outputs (uploaded as CI artifacts instead)
+trivy-results.json
+trivy.sarif
+semgrep.sarif
+checkov-results.sarif
+report_html.html
+
+# Node
+node_modules/
+.next/
+.env
+.env.*
+!.env.example
+
+# Local tooling/editor artifacts
+.firebase/
+.cursor/
+.trae/
+log/
+*.log
+
+# OS
+.DS_Store
+
+# Private Documentation
+docs/
+devops-guide/
+
+terraform/*.tfvars

@@ -1,0 +1,52 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - link "ZenType" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - img [ref=e6]
+          - generic [ref=e8]: ZenType
+        - generic [ref=e9]:
+          - button "Toggle theme" [ref=e10]:
+            - img
+            - img
+            - generic [ref=e11]: Toggle theme
+          - button [ref=e13]:
+            - img
+    - main [ref=e14]:
+      - generic [ref=e15]:
+        - generic [ref=e16]:
+          - img [ref=e18]
+          - heading "Welcome Back" [level=1] [ref=e20]
+          - paragraph [ref=e21]: Sign in to continue your typing journey
+        - generic [ref=e22]:
+          - generic [ref=e23]:
+            - generic [ref=e24]:
+              - generic [ref=e25]: Email
+              - generic [ref=e26]:
+                - img [ref=e27]
+                - textbox "Email" [ref=e30]:
+                  - /placeholder: Enter your email
+            - generic [ref=e31]:
+              - generic [ref=e32]: Password
+              - generic [ref=e33]:
+                - img [ref=e34]
+                - textbox "Password" [ref=e37]:
+                  - /placeholder: Enter your password
+                - button "Show password" [ref=e38]:
+                  - img [ref=e39]
+            - button "Login" [ref=e42]
+          - generic [ref=e47]: or
+          - generic [ref=e48]:
+            - button "Sign in with Google" [ref=e49]:
+              - img
+              - text: Sign in with Google
+            - button "Continue as Guest" [ref=e50]
+          - generic [ref=e51]:
+            - text: Don't have an account?
+            - link "Sign up" [ref=e52] [cursor=pointer]:
+              - /url: /signup
+  - button "Debug" [ref=e54]:
+    - img
+    - text: Debug
+  - alert [ref=e55]

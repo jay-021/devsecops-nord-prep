@@ -1,0 +1,26 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]
+    - main [ref=e11]:
+      - generic [ref=e12]:
+        - generic [ref=e13]:
+          - img [ref=e14]
+          - heading "Global Leaderboard" [level=1] [ref=e20]
+        - paragraph [ref=e21]: See how you stack up against the world's fastest typists
+      - tablist [ref=e24]:
+        - tab "All Time" [selected] [ref=e25]:
+          - img
+          - generic [ref=e26]: All Time
+        - tab "Monthly" [ref=e27]:
+          - img
+          - generic [ref=e28]: Monthly
+        - tab "Weekly" [ref=e29]:
+          - img
+          - generic [ref=e30]: Weekly
+      - generic [ref=e31]:
+        - img [ref=e32]
+        - generic [ref=e34]: Loading leaderboard...
+  - button "Debug" [ref=e36]:
+    - img
+    - text: Debug
+  - alert [ref=e37]

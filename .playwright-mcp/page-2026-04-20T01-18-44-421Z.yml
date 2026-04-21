@@ -1,0 +1,9 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]
+    - main [ref=e11]:
+      - paragraph [ref=e13]: Loading...
+  - button "Debug" [ref=e15]:
+    - img
+    - text: Debug
+  - alert [ref=e16]

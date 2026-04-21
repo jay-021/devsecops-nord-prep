@@ -1,0 +1,63 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ==========================================
+    // ADMIN-ONLY COLLECTIONS (NO CLIENT ACCESS)
+    // ==========================================
+    
+    // Admin Audit Log - Server-side only (GDPR compliant)
+    // Only Firebase Admin SDK can read/write audit logs
+    match /adminAuditLog/{logId} {
+      allow read, write: if false;
+    }
+    
+    // Admin Users Collection - Server-side only
+    // Stores admin preferences and settings
+    match /adminUsers/{userId} {
+      allow read, write: if false;
+    }
+    
+    // ==========================================
+    // USER COLLECTIONS WITH RESTRICTED WRITES
+    // ==========================================
+    
+    // Subscriptions - Users can read their own, only server can write
+    // Prevents users from upgrading themselves to premium
+    match /subscriptions/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if false; // Only Firebase Admin SDK can write
+    }
+    
+    // ==========================================
+    // USER COLLECTIONS WITH READ/WRITE ACCESS
+    // ==========================================
+    
+    // User Profiles - Users can read/write their own profile
+    match /profiles/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Test Results - Users can read/write their own test results
+    match /testResults/{resultId} {
+      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow write: if request.auth != null && request.data.userId == request.auth.uid;
+    }
+    
+    // AI Generated Tests - Users can read/write their own generated tests
+    match /aiGeneratedTests/{testId} {
+      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow write: if request.auth != null && request.data.userId == request.auth.uid;
+    }
+    
+    // ==========================================
+    // FALLBACK RULE (DENY ALL)
+    // ==========================================
+    
+    // Default deny - all other collections require explicit rules
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
