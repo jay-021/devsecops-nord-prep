@@ -58,7 +58,7 @@ variable "memory_limit" {
 variable "health_check_path" {
   description = "HTTP path for liveness and startup probes"
   type        = string
-  default     = "/health"
+  default     = "/"
 }
 
 variable "allow_public_access" {
