@@ -7,7 +7,7 @@ const { getFirestore, collection, addDoc } = require('firebase/firestore');
 
 // Firebase Configuration
 const firebaseConfig = {
-  apiKey: "YOUR_FIREBASE_API_KEY_HERE",
+  apiKey: "AIzaSyDnfUYqlEWULKF-m5rpV-pHWJkHfLPTbQc",
   authDomain: "zentype-65eb3.firebaseapp.com",
   projectId: "zentype-65eb3",
   storageBucket: "zentype-65eb3.firebasestorage.app",

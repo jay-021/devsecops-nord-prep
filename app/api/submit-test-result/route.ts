@@ -9,7 +9,7 @@ import { withPerformanceMonitoring } from '@/src/lib/performance-middleware';
 
 // Initialize Firebase Client SDK for both auth and firestore operations
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "YOUR_FIREBASE_API_KEY_HERE",
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "AIzaSyDnfUYqlEWULKF-m5rpV-pHWJkHfLPTbQc",
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "zentype-65eb3.firebaseapp.com",
   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "zentype-65eb3",
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "zentype-65eb3.firebasestorage.app",

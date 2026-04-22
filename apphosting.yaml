@@ -16,7 +16,7 @@ env:
 
   # Non-sensitive public environment variables
   - variable: NEXT_PUBLIC_FIREBASE_API_KEY
-    value: "YOUR_FIREBASE_API_KEY_HERE"
+    value: "AIzaSyDnfUYqlEWULKF-m5rpV-pHWJkHfLPTbQc"
   - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
     value: zentype-65eb3.firebaseapp.com
   - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
