@@ -119,6 +119,8 @@ jobs:
           context: .
           push: false
           load: true
+          build-args: |
+            NEXT_PUBLIC_FIREBASE_API_KEY=${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}
           tags: ${{ env.IMAGE }}:${{ github.sha }}
 
       - name: Trivy JSON report
@@ -173,7 +175,7 @@ jobs:
 
       - name: Build and run app container
         run: |
-          docker build -t ${{ env.IMAGE }}:${{ github.sha }} .
+          docker build --build-arg NEXT_PUBLIC_FIREBASE_API_KEY=${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }} -t ${{ env.IMAGE }}:${{ github.sha }} .
           docker run -d --name app -p 3000:3000 ${{ env.IMAGE }}:${{ github.sha }}
           for i in $(seq 1 24); do
             if curl -sf http://localhost:3000/ >/dev/null 2>&1; then
@@ -390,6 +392,8 @@ jobs:
         with:
           context: .
           push: true
+          build-args: |
+            NEXT_PUBLIC_FIREBASE_API_KEY=${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}
           tags: |
             ${{ env.IMAGE }}:${{ github.sha }}
             ${{ env.IMAGE }}:latest
